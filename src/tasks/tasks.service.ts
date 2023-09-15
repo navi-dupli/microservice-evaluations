@@ -1,6 +1,6 @@
 import {Injectable} from "@nestjs/common";
 import {Cron} from "@nestjs/schedule";
-import {HealthCheck, HealthCheckResult, HealthCheckService, TypeOrmHealthIndicator} from "@nestjs/terminus";
+import {HealthCheck, HealthCheckService, TypeOrmHealthIndicator} from "@nestjs/terminus";
 import {PubSubService} from "../pubsub/pubsub.service";
 @Injectable()
 export class TasksService {
@@ -20,6 +20,7 @@ export class TasksService {
             return { messageId };
         } catch (error) {
             console.log(error);
+            process.emit('SIGINT');
         }
     }
 }
