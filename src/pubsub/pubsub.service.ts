@@ -6,25 +6,26 @@ import {v4 as uuidv4} from 'uuid';
 @Injectable()
 export class PubSubService {
     private pubSubClient: PubSub;
+    private idInstanceApp: string = 'microservice-evaluations'+uuidv4();
 
     constructor() {
         this.pubSubClient = new PubSub();
     }
 
-    async publishMessage(topicName: string, data: any) {
+    async publishMessage(topicName: string, data: any, type: string) {
         const topic = this.pubSubClient.topic(topicName);
-        const dataBuffer = Buffer.from(JSON.stringify(data));
-
         const message = {
             "specversion" : "1.0",
-            "type" : "com.github.navi-dupli.health",
-            "source" : "https://github.com/navi-dupli/microservice-evaluations",
-            "subject" : "microservice-evaluations",
+            "type" : type,
+            "source" : "microservice-evaluations",
+            "instance" : this.idInstanceApp,
             "id" : uuidv4(),
             "time" : new Date().getTime(),
-            "data" : dataBuffer
+            "data" : data
         }
-        const messageId = await topic.publishMessage(message);
+
+        const dataBuffer = Buffer.from(JSON.stringify(message));
+        const messageId = await topic.publishMessage({data: dataBuffer});
 
         return messageId;
     }

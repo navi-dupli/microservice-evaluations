@@ -30,12 +30,12 @@ export class AppModule implements OnModuleInit, OnApplicationShutdown {
   onModuleInit() {
     console.log(`Initialization...`);
     const topicName = 'health';
-    return this.pubSubService.publishMessage(topicName, {action: 'init'});
+    return this.pubSubService.publishMessage(topicName, {}, 'inscription');
   }
 
   onApplicationShutdown(signal?: string): any {
     console.log(`Shutdown...`);
     const topicName = 'health';
-    return this.pubSubService.publishMessage(topicName, {action: 'shutdown'});
+    return this.pubSubService.publishMessage(topicName, {}, 'shutdown');
   }
 }

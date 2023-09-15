@@ -15,7 +15,7 @@ export class TasksService {
         try {
             const result = await this.db.pingCheck('database');
             const topicName = 'health';
-            const messageId = await this.pubSubService.publishMessage(topicName, result);
+            const messageId = await this.pubSubService.publishMessage(topicName, result, 'health');
             console.log(result, messageId);
             return { messageId };
         } catch (error) {
