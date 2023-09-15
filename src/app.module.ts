@@ -11,13 +11,13 @@ import {TypeOrmModule} from "@nestjs/typeorm";
     TasksModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: '34.74.44.122',
       port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'test',
+      username: 'xcloud',
+      password: 'Umc{]i2bIx.`$zP%',
+      database: 'postgres',
       entities: [],
-      synchronize: true
+      synchronize: true,
     }),],
   controllers: [AppController],
   providers: [AppService],
