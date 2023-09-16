@@ -8,12 +8,11 @@ import {PubSubService} from "./pubsub/pubsub.service";
 
 @Module({
   imports: [
-      ScheduleModule.forRoot(),
+    ScheduleModule.forRoot(),
     TasksModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: '34.74.44.122',
-      port: 5432,
+      host: '/cloudsql/proyecto-final-xcloud:us-east1:proyecto-final-db',
       username: 'xcloud',
       password: 'Umc{]i2bIx.`$zP%',
       database: 'postgres',
