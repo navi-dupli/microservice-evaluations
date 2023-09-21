@@ -9,18 +9,20 @@ export class TasksService {
         private db: TypeOrmHealthIndicator,
         private pubSubService: PubSubService
     ) {}
-    @Cron('*/30 * * * * *')
+    @Cron('*/5 * * * * *')
     @HealthCheck()
     async handleCron() {
         try {
             const result = await this.db.pingCheck('database');
+            console.log('Health check')
             const topicName = 'health';
             const messageId = await this.pubSubService.publishMessage(topicName, result, 'health');
-            console.log(result, messageId);
             return { messageId };
         } catch (error) {
-            console.log(error);
-            process.emit('SIGINT');
+            console.log('Health check error')
+            const topicName = 'health';
+            const messageId = await this.pubSubService.publishMessage(topicName, {state: 'down'}, 'health');
+            return { messageId };
         }
     }
 }

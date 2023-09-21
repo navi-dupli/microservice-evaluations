@@ -5,20 +5,25 @@ import {ScheduleModule} from "@nestjs/schedule";
 import {TasksModule} from "./tasks/tasks.module";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {PubSubService} from "./pubsub/pubsub.service";
+import {UsersModule} from "./users/users.module";
+import { ConfigModule } from '@nestjs/config';
+import * as process from "process";
 
 @Module({
   imports: [
-    ScheduleModule.forRoot(),
+    ConfigModule.forRoot({ envFilePath: `.env` }),
+      ScheduleModule.forRoot(),
     TasksModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: '/cloudsql/proyecto-final-xcloud:us-east1:proyecto-final-db',
-      username: 'xcloud',
-      password: 'Umc{]i2bIx.`$zP%',
-      database: 'postgres',
-      entities: [],
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWD,
+      database: process.env.DB_NAME,
+      entities: ["dist/**/*.entity{.ts,.js}"],
       synchronize: true,
-    }),
+    }), UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService, PubSubService],

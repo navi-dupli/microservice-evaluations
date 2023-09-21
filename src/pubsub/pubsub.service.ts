@@ -25,7 +25,6 @@ export class PubSubService {
         }
 
         const dataBuffer = Buffer.from(JSON.stringify(message));
-        console.log('Publicacion mensaje', message)
         const messageId = await topic.publishMessage({data: dataBuffer});
 
         return messageId;
