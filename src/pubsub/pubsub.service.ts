@@ -2,26 +2,23 @@
 import { Injectable } from '@nestjs/common';
 import { PubSub } from '@google-cloud/pubsub';
 import {v4 as uuidv4} from 'uuid';
-import {InstanceService} from "./instance.service";
 
 @Injectable()
 export class PubSubService {
     private pubSubClient: PubSub;
     private idInstanceApp: string;
 
-    constructor(private instanceService: InstanceService) {
+    constructor() {
         this.pubSubClient = new PubSub();
     }
 
-    async publishMessage(topicName: string, data: any, type: string) {
+    async publishMessage(topicName: string, instance: string, data: any, type: string) {
         const topic = this.pubSubClient.topic(topicName);
-        this.idInstanceApp = this.instanceService.getIdInstance();
-        console.log('idInstance--->', this.instanceService.getIdInstance())
         const message = {
             "specversion" : "1.0",
             "type" : type,
             "source" : "microservice-evaluations",
-            "instance" : this.idInstanceApp,
+            "instance" : instance,
             "id" : uuidv4(),
             "time" : new Date().getTime(),
             ...data
