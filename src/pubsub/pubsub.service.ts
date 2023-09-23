@@ -18,7 +18,7 @@ export class PubSubService {
         const message = {
             "specversion" : "1.0",
             "type" : type,
-            "source" : "microservice-evaluations",
+            "source" : "micro-evaluaciones",
             "instance" : instance,
             "id" : uuidv4(),
             "time" : new Date(),
