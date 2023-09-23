@@ -2,13 +2,14 @@
 import { Injectable } from '@nestjs/common';
 import { PubSub } from '@google-cloud/pubsub';
 import {v4 as uuidv4} from 'uuid';
+import {FirebaseAdmin, InjectFirebaseAdmin} from "nestjs-firebase";
 
 @Injectable()
 export class PubSubService {
     private pubSubClient: PubSub;
     private idInstanceApp: string;
 
-    constructor() {
+    constructor(@InjectFirebaseAdmin() private readonly firebase: FirebaseAdmin) {
         this.pubSubClient = new PubSub();
     }
 
@@ -20,11 +21,15 @@ export class PubSubService {
             "source" : "microservice-evaluations",
             "instance" : instance,
             "id" : uuidv4(),
-            "time" : new Date().getTime(),
+            "time" : new Date(),
             ...data
         }
 
-        console.log('buffer', message)
+        if (type === 'health') {
+            const healthRef = this.firebase.firestore.collection('health');
+            await healthRef.add(message);
+        }
+
         const dataBuffer = Buffer.from(JSON.stringify(message));
         const messageId = await topic.publishMessage({data: dataBuffer});
 
